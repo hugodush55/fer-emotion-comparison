@@ -1,0 +1,20 @@
+# Environnement
+.venv/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# Dataset (ne jamais pousser FER-2013)
+data/*
+!data/README.md
+
+# Modèles lourds (on ne garde que les poids légers explicitement ajoutés)
+models/*.joblib
+models/*.pkl
+!models/.gitkeep
+
+# Divers
+.DS_Store
+*.log
+gradio_cached_examples/
+.gradio/
