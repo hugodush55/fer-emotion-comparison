@@ -1,7 +1,7 @@
 """Extraction de features classiques (LBP, HOG) sur des visages 48x48 en niveaux de gris."""
 import numpy as np
 from joblib import Parallel, delayed
-from skimage.feature import local_binary_pattern
+from skimage.feature import hog, local_binary_pattern
 
 
 def lbp_features(img, P=8, R=1, method="uniform", grid=4):
@@ -17,6 +17,12 @@ def lbp_features(img, P=8, R=1, method="uniform", grid=4):
             hist, _ = np.histogram(block, bins=n_bins, range=(0, n_bins))
             hists.append(hist / block.size)
     return np.concatenate(hists).astype(np.float32)
+
+
+def hog_features(img, orientations=9, cell=8, block=2):
+    """HOG : cellules cell x cell, blocs block x block, normalisation L2-Hys."""
+    return hog(img, orientations=orientations, pixels_per_cell=(cell, cell),
+               cells_per_block=(block, block), block_norm="L2-Hys", feature_vector=True).astype(np.float32)
 
 
 def batch_features(fn, X, n_jobs=-1, **params):

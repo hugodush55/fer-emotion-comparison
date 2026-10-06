@@ -1,0 +1,14 @@
+{
+  "model": "hog_svm",
+  "test_accuracy": 0.4476177208135971,
+  "best_params": {
+    "cell": 6,
+    "C": 0.0001,
+    "val_accuracy": 0.44792755137582724
+  },
+  "hog_params": {
+    "orientations": 9,
+    "cell": 6,
+    "block": 2
+  }
+}
