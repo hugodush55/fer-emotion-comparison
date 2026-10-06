@@ -1,0 +1,17 @@
+{
+  "width": 1,
+  "params": 56951,
+  "train_time_s": 724.5,
+  "test_accuracy_no_tta": 0.6437726386179995,
+  "hyperparams": {
+    "batch_size": 64,
+    "epochs": 100,
+    "lr": 0.001,
+    "schedule": "warmup 3 + cosine",
+    "weight_decay": 0.0001,
+    "label_smoothing": 0.1
+  },
+  "final_val_accuracy": 0.6617903113365173,
+  "best_val_accuracy": 0.6624869108200073,
+  "test_accuracy_tta": 0.659933129005294
+}

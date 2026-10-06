@@ -34,21 +34,40 @@ class XceptionBlock(nn.Module):
 
 
 class MiniXception(nn.Module):
-    def __init__(self, num_classes=7):
+    """width=1 : architecture d'origine (~57k paramètres) ; width=2 double tous les canaux."""
+
+    def __init__(self, num_classes=7, width=1):
         super().__init__()
+        c = [8 * width, 16 * width, 32 * width, 64 * width, 128 * width]
         self.stem = nn.Sequential(
-            nn.Conv2d(1, 8, 3, bias=False), nn.BatchNorm2d(8), nn.ReLU(inplace=True),
-            nn.Conv2d(8, 8, 3, bias=False), nn.BatchNorm2d(8), nn.ReLU(inplace=True),
+            nn.Conv2d(1, c[0], 3, bias=False), nn.BatchNorm2d(c[0]), nn.ReLU(inplace=True),
+            nn.Conv2d(c[0], c[0], 3, bias=False), nn.BatchNorm2d(c[0]), nn.ReLU(inplace=True),
         )
-        self.blocks = nn.Sequential(
-            XceptionBlock(8, 16), XceptionBlock(16, 32), XceptionBlock(32, 64), XceptionBlock(64, 128),
-        )
-        self.head = nn.Conv2d(128, num_classes, 3, padding=1)
+        self.blocks = nn.Sequential(*[XceptionBlock(c[i], c[i + 1]) for i in range(4)])
+        self.head = nn.Conv2d(c[4], num_classes, 3, padding=1)
 
     def forward(self, x):
         """x : (N, 1, 48, 48) dans [0, 1]. Renvoie les logits (N, num_classes)."""
         x = self.head(self.blocks(self.stem(x)))
         return x.mean(dim=(2, 3))  # global average pooling
+
+
+@torch.no_grad()
+def predict_proba(model, x, tta=True):
+    """Probabilités softmax ; avec tta, moyenne avec l'image retournée horizontalement."""
+    model.eval()
+    p = torch.softmax(model(x), dim=1)
+    if tta:
+        p = (p + torch.softmax(model(x.flip(3)), dim=1)) / 2
+    return p
+
+
+def load_model(path, device="cpu"):
+    """Charge un checkpoint {state_dict, width, tta} sauvegardé par train_cnn."""
+    ckpt = torch.load(path, map_location=device)
+    model = MiniXception(width=ckpt["width"]).to(device)
+    model.load_state_dict(ckpt["state_dict"])
+    return model.eval(), ckpt.get("tta", True)
 
 
 def augment(x, max_rot=10, max_shift=0.1, max_zoom=0.1, max_bright=0.2):
