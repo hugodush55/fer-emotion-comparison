@@ -1,0 +1,1026 @@
+[
+  {
+    "P": 8,
+    "R": 1,
+    "k": 1,
+    "weights": "uniform",
+    "p": 1,
+    "val_accuracy": 0.37478230581678856
+  },
+  {
+    "P": 8,
+    "R": 1,
+    "k": 1,
+    "weights": "uniform",
+    "p": 2,
+    "val_accuracy": 0.36851271334029956
+  },
+  {
+    "P": 8,
+    "R": 1,
+    "k": 1,
+    "weights": "distance",
+    "p": 1,
+    "val_accuracy": 0.37478230581678856
+  },
+  {
+    "P": 8,
+    "R": 1,
+    "k": 1,
+    "weights": "distance",
+    "p": 2,
+    "val_accuracy": 0.36851271334029956
+  },
+  {
+    "P": 8,
+    "R": 1,
+    "k": 3,
+    "weights": "uniform",
+    "p": 1,
+    "val_accuracy": 0.3169627307558342
+  },
+  {
+    "P": 8,
+    "R": 1,
+    "k": 3,
+    "weights": "uniform",
+    "p": 2,
+    "val_accuracy": 0.30128874956461166
+  },
+  {
+    "P": 8,
+    "R": 1,
+    "k": 3,
+    "weights": "distance",
+    "p": 1,
+    "val_accuracy": 0.3719958202716823
+  },
+  {
+    "P": 8,
+    "R": 1,
+    "k": 3,
+    "weights": "distance",
+    "p": 2,
+    "val_accuracy": 0.36363636363636365
+  },
+  {
+    "P": 8,
+    "R": 1,
+    "k": 5,
+    "weights": "uniform",
+    "p": 1,
+    "val_accuracy": 0.3235806339254615
+  },
+  {
+    "P": 8,
+    "R": 1,
+    "k": 5,
+    "weights": "uniform",
+    "p": 2,
+    "val_accuracy": 0.3113897596656217
+  },
+  {
+    "P": 8,
+    "R": 1,
+    "k": 5,
+    "weights": "distance",
+    "p": 1,
+    "val_accuracy": 0.367816091954023
+  },
+  {
+    "P": 8,
+    "R": 1,
+    "k": 5,
+    "weights": "distance",
+    "p": 2,
+    "val_accuracy": 0.35492859630790663
+  },
+  {
+    "P": 8,
+    "R": 1,
+    "k": 9,
+    "weights": "uniform",
+    "p": 1,
+    "val_accuracy": 0.3058167885754093
+  },
+  {
+    "P": 8,
+    "R": 1,
+    "k": 9,
+    "weights": "uniform",
+    "p": 2,
+    "val_accuracy": 0.3099965168930686
+  },
+  {
+    "P": 8,
+    "R": 1,
+    "k": 9,
+    "weights": "distance",
+    "p": 1,
+    "val_accuracy": 0.3664228491814699
+  },
+  {
+    "P": 8,
+    "R": 1,
+    "k": 9,
+    "weights": "distance",
+    "p": 2,
+    "val_accuracy": 0.36189481017067227
+  },
+  {
+    "P": 8,
+    "R": 1,
+    "k": 15,
+    "weights": "uniform",
+    "p": 1,
+    "val_accuracy": 0.32114245907349354
+  },
+  {
+    "P": 8,
+    "R": 1,
+    "k": 15,
+    "weights": "uniform",
+    "p": 2,
+    "val_accuracy": 0.3173110414489725
+  },
+  {
+    "P": 8,
+    "R": 1,
+    "k": 15,
+    "weights": "distance",
+    "p": 1,
+    "val_accuracy": 0.3719958202716823
+  },
+  {
+    "P": 8,
+    "R": 1,
+    "k": 15,
+    "weights": "distance",
+    "p": 2,
+    "val_accuracy": 0.3723441309648206
+  },
+  {
+    "P": 8,
+    "R": 1,
+    "k": 25,
+    "weights": "uniform",
+    "p": 1,
+    "val_accuracy": 0.31800766283524906
+  },
+  {
+    "P": 8,
+    "R": 1,
+    "k": 25,
+    "weights": "uniform",
+    "p": 2,
+    "val_accuracy": 0.31173807035876
+  },
+  {
+    "P": 8,
+    "R": 1,
+    "k": 25,
+    "weights": "distance",
+    "p": 1,
+    "val_accuracy": 0.36816440264716127
+  },
+  {
+    "P": 8,
+    "R": 1,
+    "k": 25,
+    "weights": "distance",
+    "p": 2,
+    "val_accuracy": 0.3660745384883316
+  },
+  {
+    "P": 8,
+    "R": 1,
+    "k": 35,
+    "weights": "uniform",
+    "p": 1,
+    "val_accuracy": 0.31800766283524906
+  },
+  {
+    "P": 8,
+    "R": 1,
+    "k": 35,
+    "weights": "uniform",
+    "p": 2,
+    "val_accuracy": 0.3113897596656217
+  },
+  {
+    "P": 8,
+    "R": 1,
+    "k": 35,
+    "weights": "distance",
+    "p": 1,
+    "val_accuracy": 0.3730407523510972
+  },
+  {
+    "P": 8,
+    "R": 1,
+    "k": 35,
+    "weights": "distance",
+    "p": 2,
+    "val_accuracy": 0.3712991988854058
+  },
+  {
+    "P": 8,
+    "R": 1,
+    "k": 50,
+    "weights": "uniform",
+    "p": 1,
+    "val_accuracy": 0.31800766283524906
+  },
+  {
+    "P": 8,
+    "R": 1,
+    "k": 50,
+    "weights": "uniform",
+    "p": 2,
+    "val_accuracy": 0.30895158481365376
+  },
+  {
+    "P": 8,
+    "R": 1,
+    "k": 50,
+    "weights": "distance",
+    "p": 1,
+    "val_accuracy": 0.3709508881922675
+  },
+  {
+    "P": 8,
+    "R": 1,
+    "k": 50,
+    "weights": "distance",
+    "p": 2,
+    "val_accuracy": 0.36886102403343785
+  },
+  {
+    "P": 8,
+    "R": 2,
+    "k": 1,
+    "weights": "uniform",
+    "p": 1,
+    "val_accuracy": 0.3810518982932776
+  },
+  {
+    "P": 8,
+    "R": 2,
+    "k": 1,
+    "weights": "uniform",
+    "p": 2,
+    "val_accuracy": 0.3793103448275862
+  },
+  {
+    "P": 8,
+    "R": 2,
+    "k": 1,
+    "weights": "distance",
+    "p": 1,
+    "val_accuracy": 0.3810518982932776
+  },
+  {
+    "P": 8,
+    "R": 2,
+    "k": 1,
+    "weights": "distance",
+    "p": 2,
+    "val_accuracy": 0.3793103448275862
+  },
+  {
+    "P": 8,
+    "R": 2,
+    "k": 3,
+    "weights": "uniform",
+    "p": 1,
+    "val_accuracy": 0.33089515848136536
+  },
+  {
+    "P": 8,
+    "R": 2,
+    "k": 3,
+    "weights": "uniform",
+    "p": 2,
+    "val_accuracy": 0.32532218739115293
+  },
+  {
+    "P": 8,
+    "R": 2,
+    "k": 3,
+    "weights": "distance",
+    "p": 1,
+    "val_accuracy": 0.389063044235458
+  },
+  {
+    "P": 8,
+    "R": 2,
+    "k": 3,
+    "weights": "distance",
+    "p": 2,
+    "val_accuracy": 0.37025426680599094
+  },
+  {
+    "P": 8,
+    "R": 2,
+    "k": 5,
+    "weights": "uniform",
+    "p": 1,
+    "val_accuracy": 0.3448275862068966
+  },
+  {
+    "P": 8,
+    "R": 2,
+    "k": 5,
+    "weights": "uniform",
+    "p": 2,
+    "val_accuracy": 0.3371647509578544
+  },
+  {
+    "P": 8,
+    "R": 2,
+    "k": 5,
+    "weights": "distance",
+    "p": 1,
+    "val_accuracy": 0.38697318007662834
+  },
+  {
+    "P": 8,
+    "R": 2,
+    "k": 5,
+    "weights": "distance",
+    "p": 2,
+    "val_accuracy": 0.3712991988854058
+  },
+  {
+    "P": 8,
+    "R": 2,
+    "k": 9,
+    "weights": "uniform",
+    "p": 1,
+    "val_accuracy": 0.3382096830372692
+  },
+  {
+    "P": 8,
+    "R": 2,
+    "k": 9,
+    "weights": "uniform",
+    "p": 2,
+    "val_accuracy": 0.33124346917450365
+  },
+  {
+    "P": 8,
+    "R": 2,
+    "k": 9,
+    "weights": "distance",
+    "p": 1,
+    "val_accuracy": 0.38592824799721354
+  },
+  {
+    "P": 8,
+    "R": 2,
+    "k": 9,
+    "weights": "distance",
+    "p": 2,
+    "val_accuracy": 0.38070358760013934
+  },
+  {
+    "P": 8,
+    "R": 2,
+    "k": 15,
+    "weights": "uniform",
+    "p": 1,
+    "val_accuracy": 0.34622082897944967
+  },
+  {
+    "P": 8,
+    "R": 2,
+    "k": 15,
+    "weights": "uniform",
+    "p": 2,
+    "val_accuracy": 0.32985022640195055
+  },
+  {
+    "P": 8,
+    "R": 2,
+    "k": 15,
+    "weights": "distance",
+    "p": 1,
+    "val_accuracy": 0.39045628700801116
+  },
+  {
+    "P": 8,
+    "R": 2,
+    "k": 15,
+    "weights": "distance",
+    "p": 2,
+    "val_accuracy": 0.3796586555207245
+  },
+  {
+    "P": 8,
+    "R": 2,
+    "k": 25,
+    "weights": "uniform",
+    "p": 1,
+    "val_accuracy": 0.34134447927551376
+  },
+  {
+    "P": 8,
+    "R": 2,
+    "k": 25,
+    "weights": "uniform",
+    "p": 2,
+    "val_accuracy": 0.3375130616509927
+  },
+  {
+    "P": 8,
+    "R": 2,
+    "k": 25,
+    "weights": "distance",
+    "p": 1,
+    "val_accuracy": 0.39672587948450017
+  },
+  {
+    "P": 8,
+    "R": 2,
+    "k": 25,
+    "weights": "distance",
+    "p": 2,
+    "val_accuracy": 0.38662486938349006
+  },
+  {
+    "P": 8,
+    "R": 2,
+    "k": 35,
+    "weights": "uniform",
+    "p": 1,
+    "val_accuracy": 0.3486590038314176
+  },
+  {
+    "P": 8,
+    "R": 2,
+    "k": 35,
+    "weights": "uniform",
+    "p": 2,
+    "val_accuracy": 0.34099616858237547
+  },
+  {
+    "P": 8,
+    "R": 2,
+    "k": 35,
+    "weights": "distance",
+    "p": 1,
+    "val_accuracy": 0.3998606757227447
+  },
+  {
+    "P": 8,
+    "R": 2,
+    "k": 35,
+    "weights": "distance",
+    "p": 2,
+    "val_accuracy": 0.389063044235458
+  },
+  {
+    "P": 8,
+    "R": 2,
+    "k": 50,
+    "weights": "uniform",
+    "p": 1,
+    "val_accuracy": 0.3507488679902473
+  },
+  {
+    "P": 8,
+    "R": 2,
+    "k": 50,
+    "weights": "uniform",
+    "p": 2,
+    "val_accuracy": 0.3336816440264716
+  },
+  {
+    "P": 8,
+    "R": 2,
+    "k": 50,
+    "weights": "distance",
+    "p": 1,
+    "val_accuracy": 0.40195053988157436
+  },
+  {
+    "P": 8,
+    "R": 2,
+    "k": 50,
+    "weights": "distance",
+    "p": 2,
+    "val_accuracy": 0.38592824799721354
+  },
+  {
+    "P": 8,
+    "R": 3,
+    "k": 1,
+    "weights": "uniform",
+    "p": 1,
+    "val_accuracy": 0.3876698014629049
+  },
+  {
+    "P": 8,
+    "R": 3,
+    "k": 1,
+    "weights": "uniform",
+    "p": 2,
+    "val_accuracy": 0.38697318007662834
+  },
+  {
+    "P": 8,
+    "R": 3,
+    "k": 1,
+    "weights": "distance",
+    "p": 1,
+    "val_accuracy": 0.3876698014629049
+  },
+  {
+    "P": 8,
+    "R": 3,
+    "k": 1,
+    "weights": "distance",
+    "p": 2,
+    "val_accuracy": 0.38697318007662834
+  },
+  {
+    "P": 8,
+    "R": 3,
+    "k": 3,
+    "weights": "uniform",
+    "p": 1,
+    "val_accuracy": 0.3437826541274817
+  },
+  {
+    "P": 8,
+    "R": 3,
+    "k": 3,
+    "weights": "uniform",
+    "p": 2,
+    "val_accuracy": 0.3396029258098224
+  },
+  {
+    "P": 8,
+    "R": 3,
+    "k": 3,
+    "weights": "distance",
+    "p": 1,
+    "val_accuracy": 0.3928944618599791
+  },
+  {
+    "P": 8,
+    "R": 3,
+    "k": 3,
+    "weights": "distance",
+    "p": 2,
+    "val_accuracy": 0.3876698014629049
+  },
+  {
+    "P": 8,
+    "R": 3,
+    "k": 5,
+    "weights": "uniform",
+    "p": 1,
+    "val_accuracy": 0.3458725182863114
+  },
+  {
+    "P": 8,
+    "R": 3,
+    "k": 5,
+    "weights": "uniform",
+    "p": 2,
+    "val_accuracy": 0.35353535353535354
+  },
+  {
+    "P": 8,
+    "R": 3,
+    "k": 5,
+    "weights": "distance",
+    "p": 1,
+    "val_accuracy": 0.39533263671194707
+  },
+  {
+    "P": 8,
+    "R": 3,
+    "k": 5,
+    "weights": "distance",
+    "p": 2,
+    "val_accuracy": 0.39568094740508536
+  },
+  {
+    "P": 8,
+    "R": 3,
+    "k": 9,
+    "weights": "uniform",
+    "p": 1,
+    "val_accuracy": 0.34413096482062
+  },
+  {
+    "P": 8,
+    "R": 3,
+    "k": 9,
+    "weights": "uniform",
+    "p": 2,
+    "val_accuracy": 0.3396029258098224
+  },
+  {
+    "P": 8,
+    "R": 3,
+    "k": 9,
+    "weights": "distance",
+    "p": 1,
+    "val_accuracy": 0.3939393939393939
+  },
+  {
+    "P": 8,
+    "R": 3,
+    "k": 9,
+    "weights": "distance",
+    "p": 2,
+    "val_accuracy": 0.38592824799721354
+  },
+  {
+    "P": 8,
+    "R": 3,
+    "k": 15,
+    "weights": "uniform",
+    "p": 1,
+    "val_accuracy": 0.3406478578892372
+  },
+  {
+    "P": 8,
+    "R": 3,
+    "k": 15,
+    "weights": "uniform",
+    "p": 2,
+    "val_accuracy": 0.33507488679902475
+  },
+  {
+    "P": 8,
+    "R": 3,
+    "k": 15,
+    "weights": "distance",
+    "p": 1,
+    "val_accuracy": 0.3942877046325322
+  },
+  {
+    "P": 8,
+    "R": 3,
+    "k": 15,
+    "weights": "distance",
+    "p": 2,
+    "val_accuracy": 0.389063044235458
+  },
+  {
+    "P": 8,
+    "R": 3,
+    "k": 25,
+    "weights": "uniform",
+    "p": 1,
+    "val_accuracy": 0.3510971786833856
+  },
+  {
+    "P": 8,
+    "R": 3,
+    "k": 25,
+    "weights": "uniform",
+    "p": 2,
+    "val_accuracy": 0.33995123650296066
+  },
+  {
+    "P": 8,
+    "R": 3,
+    "k": 25,
+    "weights": "distance",
+    "p": 1,
+    "val_accuracy": 0.39881574364332983
+  },
+  {
+    "P": 8,
+    "R": 3,
+    "k": 25,
+    "weights": "distance",
+    "p": 2,
+    "val_accuracy": 0.39219784047370254
+  },
+  {
+    "P": 8,
+    "R": 3,
+    "k": 35,
+    "weights": "uniform",
+    "p": 1,
+    "val_accuracy": 0.3402995471960989
+  },
+  {
+    "P": 8,
+    "R": 3,
+    "k": 35,
+    "weights": "uniform",
+    "p": 2,
+    "val_accuracy": 0.3396029258098224
+  },
+  {
+    "P": 8,
+    "R": 3,
+    "k": 35,
+    "weights": "distance",
+    "p": 1,
+    "val_accuracy": 0.39184952978056425
+  },
+  {
+    "P": 8,
+    "R": 3,
+    "k": 35,
+    "weights": "distance",
+    "p": 2,
+    "val_accuracy": 0.3981191222570533
+  },
+  {
+    "P": 8,
+    "R": 3,
+    "k": 50,
+    "weights": "uniform",
+    "p": 1,
+    "val_accuracy": 0.34308603274120514
+  },
+  {
+    "P": 8,
+    "R": 3,
+    "k": 50,
+    "weights": "uniform",
+    "p": 2,
+    "val_accuracy": 0.3336816440264716
+  },
+  {
+    "P": 8,
+    "R": 3,
+    "k": 50,
+    "weights": "distance",
+    "p": 1,
+    "val_accuracy": 0.3963775687913619
+  },
+  {
+    "P": 8,
+    "R": 3,
+    "k": 50,
+    "weights": "distance",
+    "p": 2,
+    "val_accuracy": 0.389063044235458
+  },
+  {
+    "P": 16,
+    "R": 2,
+    "k": 1,
+    "weights": "uniform",
+    "p": 1,
+    "val_accuracy": 0.39045628700801116
+  },
+  {
+    "P": 16,
+    "R": 2,
+    "k": 1,
+    "weights": "uniform",
+    "p": 2,
+    "val_accuracy": 0.37547892720306514
+  },
+  {
+    "P": 16,
+    "R": 2,
+    "k": 1,
+    "weights": "distance",
+    "p": 1,
+    "val_accuracy": 0.39045628700801116
+  },
+  {
+    "P": 16,
+    "R": 2,
+    "k": 1,
+    "weights": "distance",
+    "p": 2,
+    "val_accuracy": 0.37547892720306514
+  },
+  {
+    "P": 16,
+    "R": 2,
+    "k": 3,
+    "weights": "uniform",
+    "p": 1,
+    "val_accuracy": 0.3319400905607802
+  },
+  {
+    "P": 16,
+    "R": 2,
+    "k": 3,
+    "weights": "uniform",
+    "p": 2,
+    "val_accuracy": 0.3207941483803553
+  },
+  {
+    "P": 16,
+    "R": 2,
+    "k": 3,
+    "weights": "distance",
+    "p": 1,
+    "val_accuracy": 0.38209683037269243
+  },
+  {
+    "P": 16,
+    "R": 2,
+    "k": 3,
+    "weights": "distance",
+    "p": 2,
+    "val_accuracy": 0.38000696621386276
+  },
+  {
+    "P": 16,
+    "R": 2,
+    "k": 5,
+    "weights": "uniform",
+    "p": 1,
+    "val_accuracy": 0.33646812957157785
+  },
+  {
+    "P": 16,
+    "R": 2,
+    "k": 5,
+    "weights": "uniform",
+    "p": 2,
+    "val_accuracy": 0.3389063044235458
+  },
+  {
+    "P": 16,
+    "R": 2,
+    "k": 5,
+    "weights": "distance",
+    "p": 1,
+    "val_accuracy": 0.38035527690700105
+  },
+  {
+    "P": 16,
+    "R": 2,
+    "k": 5,
+    "weights": "distance",
+    "p": 2,
+    "val_accuracy": 0.38000696621386276
+  },
+  {
+    "P": 16,
+    "R": 2,
+    "k": 9,
+    "weights": "uniform",
+    "p": 1,
+    "val_accuracy": 0.33786137234413094
+  },
+  {
+    "P": 16,
+    "R": 2,
+    "k": 9,
+    "weights": "uniform",
+    "p": 2,
+    "val_accuracy": 0.33611981887843956
+  },
+  {
+    "P": 16,
+    "R": 2,
+    "k": 9,
+    "weights": "distance",
+    "p": 1,
+    "val_accuracy": 0.38662486938349006
+  },
+  {
+    "P": 16,
+    "R": 2,
+    "k": 9,
+    "weights": "distance",
+    "p": 2,
+    "val_accuracy": 0.37652385928247994
+  },
+  {
+    "P": 16,
+    "R": 2,
+    "k": 15,
+    "weights": "uniform",
+    "p": 1,
+    "val_accuracy": 0.35353535353535354
+  },
+  {
+    "P": 16,
+    "R": 2,
+    "k": 15,
+    "weights": "uniform",
+    "p": 2,
+    "val_accuracy": 0.3239289446185998
+  },
+  {
+    "P": 16,
+    "R": 2,
+    "k": 15,
+    "weights": "distance",
+    "p": 1,
+    "val_accuracy": 0.3942877046325322
+  },
+  {
+    "P": 16,
+    "R": 2,
+    "k": 15,
+    "weights": "distance",
+    "p": 2,
+    "val_accuracy": 0.37408568443051204
+  },
+  {
+    "P": 16,
+    "R": 2,
+    "k": 25,
+    "weights": "uniform",
+    "p": 1,
+    "val_accuracy": 0.34169278996865204
+  },
+  {
+    "P": 16,
+    "R": 2,
+    "k": 25,
+    "weights": "uniform",
+    "p": 2,
+    "val_accuracy": 0.32497387669801464
+  },
+  {
+    "P": 16,
+    "R": 2,
+    "k": 25,
+    "weights": "distance",
+    "p": 1,
+    "val_accuracy": 0.38732149076976663
+  },
+  {
+    "P": 16,
+    "R": 2,
+    "k": 25,
+    "weights": "distance",
+    "p": 2,
+    "val_accuracy": 0.3719958202716823
+  },
+  {
+    "P": 16,
+    "R": 2,
+    "k": 35,
+    "weights": "uniform",
+    "p": 1,
+    "val_accuracy": 0.350400557297109
+  },
+  {
+    "P": 16,
+    "R": 2,
+    "k": 35,
+    "weights": "uniform",
+    "p": 2,
+    "val_accuracy": 0.3343782654127482
+  },
+  {
+    "P": 16,
+    "R": 2,
+    "k": 35,
+    "weights": "distance",
+    "p": 1,
+    "val_accuracy": 0.3942877046325322
+  },
+  {
+    "P": 16,
+    "R": 2,
+    "k": 35,
+    "weights": "distance",
+    "p": 2,
+    "val_accuracy": 0.3845350052246604
+  },
+  {
+    "P": 16,
+    "R": 2,
+    "k": 50,
+    "weights": "uniform",
+    "p": 1,
+    "val_accuracy": 0.34761407175200276
+  },
+  {
+    "P": 16,
+    "R": 2,
+    "k": 50,
+    "weights": "uniform",
+    "p": 2,
+    "val_accuracy": 0.3288052943225357
+  },
+  {
+    "P": 16,
+    "R": 2,
+    "k": 50,
+    "weights": "distance",
+    "p": 1,
+    "val_accuracy": 0.39672587948450017
+  },
+  {
+    "P": 16,
+    "R": 2,
+    "k": 50,
+    "weights": "distance",
+    "p": 2,
+    "val_accuracy": 0.3796586555207245
+  }
+]

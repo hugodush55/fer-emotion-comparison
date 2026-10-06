@@ -8,10 +8,9 @@ __pycache__/
 data/*
 !data/README.md
 
-# Modèles lourds (on ne garde que les poids légers explicitement ajoutés)
-models/*.joblib
+# Modèles : seuls les poids légers (< ~20 Mo) sont versionnés
 models/*.pkl
-!models/.gitkeep
+models/checkpoints/
 
 # Divers
 .DS_Store

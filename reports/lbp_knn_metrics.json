@@ -1,0 +1,18 @@
+{
+  "model": "lbp_knn",
+  "test_accuracy": 0.3948174979102814,
+  "best_params": {
+    "P": 8,
+    "R": 2,
+    "k": 50,
+    "weights": "distance",
+    "p": 1,
+    "val_accuracy": 0.40195053988157436
+  },
+  "lbp_params": {
+    "P": 8,
+    "R": 2,
+    "method": "uniform",
+    "grid": 4
+  }
+}
