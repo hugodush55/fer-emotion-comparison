@@ -17,3 +17,6 @@ models/checkpoints/
 *.log
 gradio_cached_examples/
 .gradio/
+
+# Exemples générés depuis FER-2013 par app.py
+examples/
