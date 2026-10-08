@@ -92,3 +92,39 @@ def augment(x, max_rot=10, max_shift=0.1, max_zoom=0.1, max_bright=0.2):
     contrast = 1 + (torch.rand(n, 1, 1, 1, device=dev) * 2 - 1) * max_bright
     mean = x.mean(dim=(2, 3), keepdim=True)
     return ((x - mean) * contrast + mean + bright).clamp(0, 1)
+
+
+def random_erasing(x, p=0.5, area=(0.02, 0.2), ratio=(0.3, 3.3)):
+    """Efface (bruit uniforme) un rectangle aléatoire dans une fraction p des images du batch."""
+    n, _, h, w = x.shape
+    dev = x.device
+    s = torch.empty(n, device=dev).uniform_(*area) * h * w
+    r = torch.exp(torch.empty(n, device=dev).uniform_(math.log(ratio[0]), math.log(ratio[1])))
+    eh = (s * r).sqrt().clamp(1, h).long()
+    ew = (s / r).sqrt().clamp(1, w).long()
+    top = (torch.rand(n, device=dev) * (h - eh + 1)).long()
+    left = (torch.rand(n, device=dev) * (w - ew + 1)).long()
+    rows = torch.arange(h, device=dev).view(1, h, 1)
+    cols = torch.arange(w, device=dev).view(1, 1, w)
+    mask = ((rows >= top.view(-1, 1, 1)) & (rows < (top + eh).view(-1, 1, 1))
+            & (cols >= left.view(-1, 1, 1)) & (cols < (left + ew).view(-1, 1, 1)))
+    mask &= (torch.rand(n, device=dev) < p).view(-1, 1, 1)
+    return torch.where(mask.unsqueeze(1), torch.rand_like(x), x)
+
+
+def mix_batch(x, y, mixup_alpha=0.4, cutmix_alpha=1.0):
+    """Applique mixup ou cutmix (1 chance sur 2) : renvoie x mélangé, y, y permuté et lambda."""
+    perm = torch.randperm(x.shape[0], device=x.device)
+    if torch.rand(1).item() < 0.5:
+        lam = float(torch.distributions.Beta(mixup_alpha, mixup_alpha).sample())
+        return lam * x + (1 - lam) * x[perm], y, y[perm], lam
+    lam = float(torch.distributions.Beta(cutmix_alpha, cutmix_alpha).sample())
+    h, w = x.shape[2:]
+    ch, cw = int(h * math.sqrt(1 - lam)), int(w * math.sqrt(1 - lam))
+    cy, cx = torch.randint(h, (1,)).item(), torch.randint(w, (1,)).item()
+    y0, y1 = max(cy - ch // 2, 0), min(cy + ch // 2, h)
+    x0, x1 = max(cx - cw // 2, 0), min(cx + cw // 2, w)
+    x = x.clone()
+    x[:, :, y0:y1, x0:x1] = x[perm, :, y0:y1, x0:x1]
+    lam = 1 - (y1 - y0) * (x1 - x0) / (h * w)  # proportion réelle conservée
+    return x, y, y[perm], lam

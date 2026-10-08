@@ -11,6 +11,8 @@ Deux modes :
 
     python -m src.train_cnn --mode val --width 2
     python -m src.train_cnn --mode full --width 2
+
+Options de régularisation : --erasing (random erasing) et --mix-prob (mixup/cutmix).
 """
 import argparse
 import json
@@ -24,7 +26,7 @@ import numpy as np
 import torch
 import torch.nn as nn
 
-from src.cnn import MiniXception, augment, predict_proba
+from src.cnn import MiniXception, augment, mix_batch, predict_proba, random_erasing
 from src.config import MODELS_DIR, REPORTS_DIR, SEED
 from src.data import load_split, train_val_split
 from src.evaluation import evaluate
@@ -41,6 +43,9 @@ def parse_args():
     ap.add_argument("--lr", type=float, default=1e-3)
     ap.add_argument("--weight-decay", type=float, default=1e-4)
     ap.add_argument("--label-smoothing", type=float, default=0.1)
+    ap.add_argument("--erasing", type=float, default=0.0, help="probabilité de random erasing")
+    ap.add_argument("--mix-prob", type=float, default=0.0, help="probabilité de mixup/cutmix par batch")
+    ap.add_argument("--tag", default="", help="suffixe des fichiers de rapport (mode val)")
     return ap.parse_args()
 
 
@@ -85,7 +90,7 @@ def main():
     torch.manual_seed(SEED)
     np.random.seed(SEED)
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    tag = f"mini_xception_w{args.width}_{args.mode}"
+    tag = f"mini_xception_w{args.width}_{args.mode}" + (f"_{args.tag}" if args.tag else "")
 
     X_train, y_train = load_split("train")
     X_test, y_test = load_split("test")
@@ -114,8 +119,15 @@ def main():
         for i in range(0, len(perm), BATCH_SIZE):
             idx = perm[i:i + BATCH_SIZE]
             xb, yb = augment(X_fit[idx]), y_fit[idx]
-            logits = model(xb)
-            loss = criterion(logits, yb)
+            if args.erasing > 0:
+                xb = random_erasing(xb, p=args.erasing)
+            if args.mix_prob > 0 and torch.rand(1).item() < args.mix_prob:
+                xb, yb, yb2, lam = mix_batch(xb, yb)
+                logits = model(xb)
+                loss = lam * criterion(logits, yb) + (1 - lam) * criterion(logits, yb2)
+            else:
+                logits = model(xb)
+                loss = criterion(logits, yb)
             optimizer.zero_grad(set_to_none=True)
             loss.backward()
             optimizer.step()
@@ -147,7 +159,8 @@ def main():
         "test_accuracy_no_tta": float(acc_no_tta),
         "hyperparams": {"batch_size": BATCH_SIZE, "epochs": args.epochs, "lr": args.lr,
                         "schedule": f"warmup {WARMUP_EPOCHS} + cosine", "weight_decay": args.weight_decay,
-                        "label_smoothing": args.label_smoothing},
+                        "label_smoothing": args.label_smoothing, "random_erasing": args.erasing,
+                        "mixup_cutmix_prob": args.mix_prob},
     }
     if args.mode == "val":
         summary["final_val_accuracy"] = history["val_acc"][-1]
