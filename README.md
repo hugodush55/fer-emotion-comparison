@@ -10,9 +10,9 @@ qui applique les trois modèles **au même visage** et affiche pour chacun le la
 
 | Modèle | Latence moyenne (ms) | Accuracy 50 images | Accuracy test complet (7 178 images) |
 |---|---|---|---|
-| LBP + KNN | **4,3** | 38 % | **39,5 %** |
-| HOG + SVM linéaire (OvR) | **3,5** | 46 % | **44,8 %** |
-| mini-Xception (CNN) | **8,7** (5,8 sur GPU) | 72 % | **69,4 %** |
+| LBP + KNN | **4,1** | 38 % | **39,5 %** |
+| HOG + SVM linéaire (OvR) | **3,2** | 50 % | **43,5 %** |
+| mini-Xception (CNN) | **8,5** (5,1 sur GPU) | 72 % | **69,4 %** |
 
 - Latence = extraction des features + inférence, sur CPU, moyenne sur 500 images de test, premiers appels exclus
   (préchauffage). Pour le CNN, elle inclut le TTA (2 passes : image et image retournée).
@@ -57,7 +57,7 @@ de la session, et les probabilités des 7 classes. Si aucun visage n'est détect
 
 ```bash
 python -m src.train_knn                  # modèle 1 (~5 min)
-python -m src.train_svm                  # modèle 2 (~25 min, LinearSVC est mono-thread)
+python -m src.train_svm                  # modèle 2 (~10 min, LinearSVC est mono-thread)
 python -m src.train_cnn --mode full --width 2 --epochs 200 --erasing 0.5 --mix-prob 0.5   # modèle 3 (~20 min sur RTX 4060)
 python -m src.benchmark                  # tableau de latence / accuracy
 ```
@@ -105,11 +105,13 @@ de 10 % tirée du train** (graine fixe). Le test n'est utilisé que pour l'éval
 
 ### Modèle 2 : HOG + SVM linéaire (One-vs-Rest)
 
-- HOG (`skimage.feature.hog`) : 9 orientations, blocs 2×2 cellules, normalisation L2-Hys.
-- Cellules 8×8 (valeur du TD, 900 features) et 6×6 (1 764 features) testées, avec C ∈ {1e-4, …, 1}.
-  Features standardisées, `LinearSVC` (One-vs-Rest par défaut).
-- **Retenu : cellules 6×6, C = 1e-4.** Validation 44,8 % (contre 44,7 % avec des cellules 8×8 : le choix du TD est
-  quasi optimal). Une régularisation faible (C grand) surapprend : 42,5 % de validation à C=1.
+- HOG (`skimage.feature.hog`) : cellules 8×8, blocs 2×2 cellules, 9 orientations, normalisation L2-Hys
+  (900 features). Features standardisées, `LinearSVC` (One-vs-Rest par défaut), C ∈ {1e-4, …, 1}.
+- **Retenu : C = 0,01.** Validation 44,7 %, test 43,5 %. La courbe en C est plate (44,1 à 44,7 %) : le modèle est
+  limité par les features, pas par la régularisation.
+- Des cellules 6×6 (1 764 features) ont aussi été testées : 44,8 % en validation et en test, soit +0,1 point en
+  validation, dans le bruit. On garde les 8×8 de l'énoncé
+  ([reports/hog_svm_grid_cells_6_8.json](reports/hog_svm_grid_cells_6_8.json)).
 - Confiance : `LinearSVC` ne donne pas de probabilités. Les scores sont calibrés par `CalibratedClassifierCV`
   (sigmoïde, 3 folds).
 
@@ -156,33 +158,33 @@ Le modèle a été amélioré en trois étapes, chacune choisie sur la validatio
 | Rappel par classe | Angry | Disgust | Fear | Happy | Sad | Surprise | Neutral |
 |---|---|---|---|---|---|---|---|
 | LBP + KNN | 25 % | 27 % | 21 % | 69 % | 23 % | 48 % | 36 % |
-| HOG + SVM | 26 % | 13 % | 17 % | 77 % | 30 % | 56 % | 46 % |
+| HOG + SVM | 25 % | 13 % | 18 % | 78 % | 25 % | 54 % | 43 % |
 | mini-Xception | 60 % | 50 % | 47 % | 89 % | 60 % | 80 % | 71 % |
 
 - **Disgust → Angry** : la confusion la plus marquée, qui augmente même avec le CNN (14 % pour le KNN, 23 % pour le
   SVM, 29 % pour le CNN). Les deux expressions partagent les mêmes indices (sourcils froncés, nez plissé, lèvre
   supérieure relevée). Disgust est aussi de loin la classe la plus rare (1,5 % du train) : le modèle apprend mal sa
   frontière et la rabat sur Angry.
-- **Fear → Sad** (13 %, 18 %, 21 %) et **Fear → Surprise** (8 à 13 %) : Fear est la classe la plus difficile pour
+- **Fear → Sad** (13 %, 16 %, 21 %) et **Fear → Surprise** (8 à 14 %) : Fear est la classe la plus difficile pour
   tous les modèles. Elle partage la bouche ouverte et les yeux écarquillés avec Surprise, et les sourcils relevés au
   centre avec Sad.
-- **Sad ↔ Neutral** (Sad → Neutral 18 à 22 % ; Neutral → Sad 9 à 14 %) : des expressions de faible intensité, souvent
+- **Sad ↔ Neutral** (Sad → Neutral 18 à 25 % ; Neutral → Sad 9 à 14 %) : des expressions de faible intensité, souvent
   ambiguës même pour un humain (l'accuracy humaine sur FER-2013 est estimée à environ 65 %).
 - **Biais vers Happy** des modèles classiques : le KNN classe Happy 33 à 38 % des Angry, Disgust, Fear, Sad et Neutral.
   Happy est la classe majoritaire (25 % du train) et ses voisins dominent dans l'espace des histogrammes LBP. Le SVM
-  atténue ce biais (20 à 26 %) et le CNN le supprime (1 à 6 %).
+  atténue ce biais (21 à 29 %) et le CNN le supprime (1 à 6 %).
 - Happy et Surprise, les expressions les plus marquées visuellement (sourire, bouche ouverte en O), sont les mieux
   reconnues par les trois modèles.
 
 ### Précision et vitesse
 
-- **Le CNN est meilleur de 25 points que le meilleur modèle classique**, pour une latence du même ordre de grandeur
-  (8,7 ms contre 3,5 à 4,3 ms sur CPU, 5,8 ms sur GPU). Les trois modèles sont largement temps réel : même en ajoutant
+- **Le CNN est meilleur de 26 points que le meilleur modèle classique**, pour une latence du même ordre de grandeur
+  (8,5 ms contre 3,2 à 4,1 ms sur CPU, 5,1 ms sur GPU). Les trois modèles sont largement temps réel : même en ajoutant
   la détection (12 ms), une image est traitée en moins de 25 ms, et c'est la détection qui domine.
 - Le CNN est aussi le plus léger (0,8 Mo) : le KNN doit stocker toute sa base d'entraînement (5,1 Mo) et son coût
   d'inférence croît avec elle.
-- Les features faites à la main plafonnent : 128 configurations LBP+KNN donnent toutes 36 à 40 %, et le HOG gagne à
-  peine en passant de cellules 8×8 à 6×6. Le CNN apprend des features adaptées à la tâche et bénéficie des
+- Les features faites à la main plafonnent : 128 configurations LBP+KNN donnent toutes 36 à 40 %, et le HOG ne gagne
+  que 0,1 point de validation en passant de cellules 8×8 à 6×6. Le CNN apprend des features adaptées à la tâche et bénéficie des
   augmentations, ce que les modèles classiques ne peuvent pas exploiter de la même façon.
 - Le TTA du CNN illustre le compromis : +1,5 point pour une latence doublée.
 

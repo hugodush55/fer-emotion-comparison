@@ -22,7 +22,7 @@ from src.data import load_split, train_val_split
 from src.evaluation import evaluate
 from src.features import batch_features, hog_features
 
-CELL_GRID = [8, 6]  # pixels par cellule (8 = valeur du TD)
+CELL_GRID = [8]  # pixels par cellule, valeur du TD (6x6 testé : +0,1 pt en validation, non retenu)
 C_GRID = [0.0001, 0.001, 0.01, 0.1, 1.0]
 
 
