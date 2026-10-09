@@ -1,0 +1,35 @@
+{
+  "n_latency": 500,
+  "detection_ms_mean": 12.009141174999058,
+  "detection_rate": 0.785,
+  "cnn_gpu_latency_ms_mean": 5.764980249989094,
+  "models": [
+    {
+      "model": "LBP + KNN",
+      "latency_ms_mean": 4.265207637979984,
+      "latency_ms_std": 0.932516816953621,
+      "latency_ms_p95": 5.704191600852937,
+      "accuracy_50": 0.38,
+      "accuracy_500": 0.382,
+      "accuracy_full_test": 0.3948174979102814
+    },
+    {
+      "model": "HOG + SVM lin\u00e9aire",
+      "latency_ms_mean": 3.5249473500171007,
+      "latency_ms_std": 0.7767910855789082,
+      "latency_ms_p95": 4.723737200083633,
+      "accuracy_50": 0.46,
+      "accuracy_500": 0.438,
+      "accuracy_full_test": 0.4476177208135971
+    },
+    {
+      "model": "mini-Xception (CNN)",
+      "latency_ms_mean": 8.713434938021237,
+      "latency_ms_std": 4.637230290677303,
+      "latency_ms_p95": 12.198405649996856,
+      "accuracy_50": 0.72,
+      "accuracy_500": 0.712,
+      "accuracy_full_test": 0.6936472555029256
+    }
+  ]
+}
