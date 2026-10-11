@@ -1,0 +1,9 @@
+# Hugging Face Space (CPU hardware). Gradio itself is installed from sdk_version in README.md.
+--extra-index-url https://download.pytorch.org/whl/cpu
+torch==2.14.1+cpu
+
+numpy<2.3
+scikit-image>=0.24
+scikit-learn==1.7.2  # same version as training, to load the pickled models safely
+opencv-python-headless>=4.10,<5  # headless: no libGL on Spaces; OpenCV 5 removed CascadeClassifier
+joblib>=1.4
