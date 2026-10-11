@@ -1,15 +1,10 @@
-# PyTorch : la roue PyPI par défaut inclut CUDA sous Linux (testé : torch 2.14 + cu130).
+# PyTorch: the default PyPI wheel ships with CUDA on Linux (tested: torch 2.14 + cu130).
 torch>=2.4
-torchvision>=0.19
 
 numpy<2.3
 scikit-image>=0.24
 scikit-learn>=1.5
-opencv-python>=4.10,<5  # OpenCV 5 a retiré CascadeClassifier (Haar)
+opencv-python>=4.10,<5  # OpenCV 5 removed CascadeClassifier (Haar)
 matplotlib>=3.9
-seaborn>=0.13
-pandas>=2.2
 joblib>=1.4
-tqdm>=4.66
-gradio>=5.0
-
+gradio>=6.0

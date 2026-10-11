@@ -1,5 +1,5 @@
-"""Pipeline par image : détection du visage (Haar), recadrage/alignement, 48x48,
-puis prédiction par les 3 modèles avec chronométrage séparé."""
+"""Per-image pipeline: face detection (Haar), crop/alignment, 48x48,
+then prediction by the 3 models, each timed separately."""
 import time
 from dataclasses import dataclass, field
 
@@ -14,7 +14,7 @@ from src.features import hog_features, lbp_features
 
 MODEL_NAMES = {
     "lbp_knn": "LBP + KNN",
-    "hog_svm": "HOG + SVM linéaire",
+    "hog_svm": "HOG + linear SVM",
     "mini_xception": "mini-Xception (CNN)",
 }
 
@@ -22,8 +22,8 @@ MODEL_NAMES = {
 @dataclass
 class Prediction:
     model: str
-    probs: np.ndarray            # (7,), dans l'ordre de LABELS
-    latency_ms: float            # features + inférence
+    probs: np.ndarray            # (7,), in LABELS order
+    latency_ms: float            # features + inference
 
     @property
     def label(self):
@@ -36,8 +36,8 @@ class Prediction:
 
 @dataclass
 class FaceResult:
-    faces: list                  # toutes les boîtes (x, y, w, h), la plus grande en premier
-    face48: np.ndarray | None    # visage retenu, uint8 48x48
+    faces: list                  # all boxes (x, y, w, h), largest first
+    face48: np.ndarray | None    # selected face, uint8 48x48
     detect_ms: float
     predictions: list = field(default_factory=list)
 
@@ -49,12 +49,12 @@ class FaceDetector:
         self.eyes = cv2.CascadeClassifier(root + "haarcascade_eye.xml")
 
     def detect(self, gray):
-        """Boîtes (x, y, w, h) triées par surface décroissante."""
+        """Boxes (x, y, w, h) sorted by decreasing area."""
         boxes = self.face.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=5, minSize=(40, 40))
         return sorted((tuple(int(v) for v in b) for b in boxes), key=lambda b: b[2] * b[3], reverse=True)
 
     def eye_angle(self, face_gray):
-        """Angle (degrés) de la ligne des yeux, ou None si les deux yeux ne sont pas trouvés."""
+        """Angle (degrees) of the eye line, or None if both eyes are not found."""
         h, w = face_gray.shape
         eyes = self.eyes.detectMultiScale(face_gray[: h // 2], scaleFactor=1.1, minNeighbors=6,
                                           minSize=(w // 10, w // 10))
@@ -62,13 +62,13 @@ class FaceDetector:
             return None
         eyes = sorted(eyes, key=lambda e: e[2] * e[3], reverse=True)[:2]
         (x1, y1), (x2, y2) = sorted((x + ew / 2, y + eh / 2) for x, y, ew, eh in eyes)
-        if x2 - x1 < w * 0.2:  # deux détections du même œil
+        if x2 - x1 < w * 0.2:  # two detections of the same eye
             return None
         angle = np.degrees(np.arctan2(y2 - y1, x2 - x1))
         return angle if abs(angle) < 25 else None
 
     def crop(self, gray, box, margin=0.1, align=True):
-        """Recadre le visage (avec une marge), l'aligne sur les yeux si possible, redimensionne en 48x48."""
+        """Crop the face (with a margin), align it on the eyes when possible, resize to 48x48."""
         x, y, w, h = box
         if align:
             angle = self.eye_angle(gray[y:y + h, x:x + w])
@@ -89,14 +89,14 @@ class EmotionPipeline:
         knn = joblib.load(MODELS_DIR / "lbp_knn.joblib")
         svm = joblib.load(MODELS_DIR / "hog_svm.joblib")
         self.knn, self.lbp_params = knn["model"], knn["lbp_params"]
-        self.knn.n_jobs = 1  # une seule requête à la fois : le parallélisme ne fait qu'ajouter du surcoût
+        self.knn.n_jobs = 1  # one query at a time: parallelism only adds overhead
         self.svm, self.hog_params = svm["model"], svm["hog_params"]
         self.device = torch.device(device)
         self.cnn, self.tta = load_model(MODELS_DIR / "mini_xception.pt", self.device)
         self.warmup()
 
     def warmup(self, n=3):
-        """Premiers appels plus lents (allocation, JIT, caches) : exclus des mesures."""
+        """First calls are slower (allocation, JIT, caches): keep them out of the measurements."""
         dummy = np.random.randint(0, 255, (IMG_SIZE, IMG_SIZE), dtype=np.uint8)
         for _ in range(n):
             self.predict_face(dummy)
@@ -112,7 +112,7 @@ class EmotionPipeline:
         return predict_proba(self.cnn, x, self.tta)[0].cpu().numpy()
 
     def predict_face(self, face48):
-        """Prédiction des 3 modèles sur un visage 48x48 uint8, chacun chronométré séparément."""
+        """Predictions of the 3 models on a 48x48 uint8 face, each one timed separately."""
         preds = []
         for name, fn in (("lbp_knn", self._knn), ("hog_svm", self._svm), ("mini_xception", self._cnn)):
             t0 = time.perf_counter()
@@ -122,8 +122,8 @@ class EmotionPipeline:
         return preds
 
     def process(self, image, detect=True, align=True):
-        """image : RGB ou niveaux de gris (numpy). Si detect=False, l'image entière est
-        considérée comme le visage (cas des images FER-2013 déjà recadrées)."""
+        """image: RGB or grayscale (numpy). With detect=False, the whole image is used
+        as the face (for FER-2013 images, which are already cropped)."""
         gray = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY) if image.ndim == 3 else image
         if not detect:
             face = cv2.resize(gray, (IMG_SIZE, IMG_SIZE), interpolation=cv2.INTER_AREA)

@@ -1,32 +1,32 @@
 {
   "n_latency": 500,
-  "detection_ms_mean": 11.642180395010655,
+  "detection_ms_mean": 10.578813545007506,
   "detection_rate": 0.785,
-  "cnn_gpu_latency_ms_mean": 5.11533526799667,
+  "cnn_gpu_latency_ms_mean": 5.823188613997445,
   "models": [
     {
       "model": "LBP + KNN",
-      "latency_ms_mean": 4.137132087997998,
-      "latency_ms_std": 0.9649378718162464,
-      "latency_ms_p95": 5.921029399939925,
+      "latency_ms_mean": 3.2119540180019612,
+      "latency_ms_std": 0.45077205662466757,
+      "latency_ms_p95": 3.920214850222692,
       "accuracy_50": 0.38,
       "accuracy_500": 0.382,
       "accuracy_full_test": 0.3948174979102814
     },
     {
-      "model": "HOG + SVM lin\u00e9aire",
-      "latency_ms_mean": 3.1596973819914638,
-      "latency_ms_std": 0.6891279580282589,
-      "latency_ms_p95": 4.298924949932825,
+      "model": "HOG + linear SVM",
+      "latency_ms_mean": 2.3725065460048427,
+      "latency_ms_std": 0.4442855208655962,
+      "latency_ms_p95": 3.0231117501898552,
       "accuracy_50": 0.5,
       "accuracy_500": 0.41,
       "accuracy_full_test": 0.4352187238785177
     },
     {
       "model": "mini-Xception (CNN)",
-      "latency_ms_mean": 8.527067824001278,
-      "latency_ms_std": 4.637331526656673,
-      "latency_ms_p95": 11.908229499965726,
+      "latency_ms_mean": 6.450138304020584,
+      "latency_ms_std": 3.6280816835748735,
+      "latency_ms_p95": 7.607937850252711,
       "accuracy_50": 0.72,
       "accuracy_500": 0.712,
       "accuracy_full_test": 0.6936472555029256

@@ -1,8 +1,8 @@
-"""Modèle 2 : HOG + SVM linéaire (One-vs-Rest).
+"""Model 2: HOG + linear SVM (One-vs-Rest).
 
-Sélection de la taille de cellule HOG et de C sur une validation tirée de train,
-puis réentraînement sur tout train avec calibration des scores en probabilités
-(LinearSVC ne fournit pas de probabilités), et évaluation sur test.
+C (and the HOG cell size) is selected on a validation split taken from train, then the
+model is refit on the whole train set with score calibration (LinearSVC does not output
+probabilities) and evaluated on test.
 
     python -m src.train_svm
 """
@@ -22,12 +22,12 @@ from src.data import load_split, train_val_split
 from src.evaluation import evaluate
 from src.features import batch_features, hog_features
 
-CELL_GRID = [8]  # pixels par cellule, valeur du TD (6x6 testé : +0,1 pt en validation, non retenu)
+CELL_GRID = [8]  # pixels per cell, as specified (6x6 was tested: +0.1 pt on validation, not kept)
 C_GRID = [0.0001, 0.001, 0.01, 0.1, 1.0]
 
 
 def make_svm(C):
-    # LinearSVC fait du One-vs-Rest ; dual=False car n_samples > n_features.
+    # LinearSVC is One-vs-Rest; dual=False because n_samples > n_features.
     return LinearSVC(C=C, dual=False, max_iter=5000, random_state=SEED)
 
 
@@ -41,7 +41,7 @@ def main():
     for cell in CELL_GRID:
         F_tr = batch_features(hog_features, X_tr, cell=cell)
         F_val = batch_features(hog_features, X_val, cell=cell)
-        print(f"\nHOG cell={cell} : {F_tr.shape[1]} features")
+        print(f"\nHOG cell={cell}: {F_tr.shape[1]} features")
         for C in C_GRID:
             t0 = time.perf_counter()
             clf = make_pipeline(StandardScaler(), make_svm(C)).fit(F_tr, y_tr)
@@ -52,7 +52,7 @@ def main():
             if best is None or acc > best["val_accuracy"]:
                 best = row
 
-    print(f"\nMeilleure config : {best}")
+    print(f"\nBest config: {best}")
     REPORTS_DIR.mkdir(exist_ok=True)
     (REPORTS_DIR / "hog_svm_grid.json").write_text(json.dumps(results, indent=2))
 
@@ -66,7 +66,7 @@ def main():
 
     MODELS_DIR.mkdir(exist_ok=True)
     joblib.dump({"model": clf, "hog_params": hog_params}, MODELS_DIR / "hog_svm.joblib", compress=3)
-    print(f"Modèle sauvegardé dans {MODELS_DIR / 'hog_svm.joblib'}")
+    print(f"Model saved to {MODELS_DIR / 'hog_svm.joblib'}")
 
 
 if __name__ == "__main__":

@@ -1,9 +1,8 @@
-"""Mini-tableau du rendu : latence moyenne par modèle (ms) et accuracy.
+"""Results table for the submission: mean latency per model (ms) and accuracy.
 
-Mesures faites avec le pipeline de l'application (mêmes fonctions, même chronométrage),
-sur des images de test FER-2013 déjà recadrées en 48x48. Les premiers appels sont exclus
-(préchauffage dans EmotionPipeline). La détection Haar est mesurée à part, sur des images
-640x480 contenant un visage.
+Measured with the app pipeline (same functions, same timing) on FER-2013 test images,
+which are already cropped to 48x48. First calls are excluded (warm-up in EmotionPipeline).
+Haar detection is measured separately, on 640x480 images containing one face.
 
     python -m src.benchmark
 """
@@ -33,7 +32,7 @@ def run(pipeline, X, y):
 
 
 def detection_latency(pipeline, X, n=200):
-    """Visage FER agrandi et placé dans une image 640x480 : détection + recadrage."""
+    """FER face upscaled and pasted into a 640x480 image: detection + crop."""
     rng = np.random.default_rng(SEED)
     times, found = [], 0
     for img in X[:n]:
@@ -51,7 +50,6 @@ def main():
     X, y = load_split("test")
     rng = np.random.default_rng(SEED)
     idx_lat = rng.choice(len(X), N_LATENCY, replace=False)
-    idx_small = idx_lat[:N_ACC_SMALL]
 
     cpu = EmotionPipeline(device="cpu")
     lat, correct = run(cpu, X[idx_lat], y[idx_lat])
@@ -84,8 +82,8 @@ def main():
     (REPORTS_DIR / "results.json").write_text(json.dumps(results, indent=2))
 
     lines = [
-        f"| Modèle | Latence moyenne (ms) | Écart-type / p95 (ms) | Accuracy {N_ACC_SMALL} images "
-        f"| Accuracy {N_LATENCY} images | Accuracy test complet (7178) |",
+        f"| Model | Mean latency (ms) | Std / p95 (ms) | Accuracy {N_ACC_SMALL} images "
+        f"| Accuracy {N_LATENCY} images | Accuracy full test set (7178) |",
         "|---|---|---|---|---|---|",
     ]
     for r in rows:
@@ -94,12 +92,13 @@ def main():
                      f"{r[f'accuracy_{N_LATENCY}']:.1%} | **{r['accuracy_full_test']:.1%}** |")
     notes = [
         "",
-        f"Latences sur CPU, {N_LATENCY} images de test, premiers appels exclus ; "
-        "latence = extraction des features + inférence (+ TTA flip pour le CNN).",
-        f"Détection Haar + recadrage (image 640x480) : {det_ms:.1f} ms en moyenne, commune aux 3 modèles.",
+        f"Latencies on CPU, {N_LATENCY} test images, first calls excluded; "
+        "latency = feature extraction + inference (+ flip TTA for the CNN).",
+        f"Haar detection + crop (640x480 image): {det_ms:.1f} ms on average, shared by the 3 models "
+        f"(face found in {det_rate:.0%} of the synthetic test images).",
     ]
     if gpu_ms:
-        notes.append(f"mini-Xception sur GPU ({torch.cuda.get_device_name(0)}) : {gpu_ms:.1f} ms.")
+        notes.append(f"mini-Xception on GPU ({torch.cuda.get_device_name(0)}): {gpu_ms:.1f} ms.")
     table = "\n".join(lines + notes)
     (REPORTS_DIR / "results.md").write_text(table + "\n")
     print(table)

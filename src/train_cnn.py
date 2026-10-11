@@ -1,18 +1,18 @@
-"""Modèle 3 : entraînement de mini-Xception sur FER-2013.
+"""Model 3: mini-Xception training on FER-2013.
 
-Adam (lr 1e-3, warmup puis décroissance cosinus), batch 64, label smoothing,
-augmentations sur GPU, TTA par flip horizontal à l'inférence.
+Adam (lr 1e-3, warmup then cosine decay), batch 64, label smoothing,
+GPU augmentations, horizontal-flip TTA at inference.
 
-Deux modes :
-  --mode val   entraîne sur train (90 %) et suit la validation (10 %) : sert à choisir
-               la largeur et à vérifier que le schedule ne surapprend pas.
-  --mode full  réentraîne sur tout train avec le même schedule, sauvegarde
-               models/mini_xception.pt et évalue sur test.
+Two modes:
+  --mode val   trains on train (90 %) and tracks validation (10 %): used to pick
+               the width and to check that the schedule does not overfit.
+  --mode full  retrains on the whole train set with the same schedule, saves
+               models/mini_xception.pt and evaluates on test.
 
     python -m src.train_cnn --mode val --width 2
     python -m src.train_cnn --mode full --width 2
 
-Options de régularisation : --erasing (random erasing) et --mix-prob (mixup/cutmix).
+Regularization options: --erasing (random erasing) and --mix-prob (mixup/cutmix).
 """
 import argparse
 import json
@@ -43,9 +43,9 @@ def parse_args():
     ap.add_argument("--lr", type=float, default=1e-3)
     ap.add_argument("--weight-decay", type=float, default=1e-4)
     ap.add_argument("--label-smoothing", type=float, default=0.1)
-    ap.add_argument("--erasing", type=float, default=0.0, help="probabilité de random erasing")
-    ap.add_argument("--mix-prob", type=float, default=0.0, help="probabilité de mixup/cutmix par batch")
-    ap.add_argument("--tag", default="", help="suffixe des fichiers de rapport (mode val)")
+    ap.add_argument("--erasing", type=float, default=0.0, help="random erasing probability")
+    ap.add_argument("--mix-prob", type=float, default=0.0, help="per-batch mixup/cutmix probability")
+    ap.add_argument("--tag", default="", help="report file suffix")
     return ap.parse_args()
 
 
@@ -58,7 +58,7 @@ def batched_proba(model, X, tta, batch_size=1024):
 
 
 def warmup_cosine(epochs):
-    """Facteur de lr : montée linéaire sur WARMUP_EPOCHS puis décroissance cosinus vers 0."""
+    """LR factor: linear warmup over WARMUP_EPOCHS, then cosine decay to 0."""
     def factor(epoch):
         if epoch < WARMUP_EPOCHS:
             return (epoch + 1) / WARMUP_EPOCHS
@@ -75,7 +75,7 @@ def plot_history(history, path):
     if history["val_loss"]:
         ax1.plot(epochs, history["val_loss"], label="val")
         ax2.plot(epochs, history["val_acc"], label="val (TTA)")
-    ax1.set(title="Loss (avec label smoothing)", xlabel="epoch")
+    ax1.set(title="Loss (with label smoothing)", xlabel="epoch")
     ax2.set(title="Accuracy", xlabel="epoch")
     for ax in (ax1, ax2):
         ax.legend()
@@ -105,7 +105,7 @@ def main():
 
     model = MiniXception(width=args.width).to(device)
     n_params = sum(p.numel() for p in model.parameters())
-    print(f"paramètres : {n_params:,}")
+    print(f"parameters: {n_params:,}")
     criterion = nn.CrossEntropyLoss(label_smoothing=args.label_smoothing)
     optimizer = torch.optim.Adam(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
     scheduler = torch.optim.lr_scheduler.LambdaLR(optimizer, warmup_cosine(args.epochs))
@@ -173,8 +173,8 @@ def main():
         torch.save({"state_dict": model.state_dict(), "width": args.width, "tta": True},
                    MODELS_DIR / "mini_xception.pt")
         evaluate("mini_xception", y_test, y_pred, extra=summary)
-        print(f"sans TTA : {acc_no_tta:.4f}")
-    print(f"Entraînement : {train_time / 60:.1f} min")
+        print(f"without TTA: {acc_no_tta:.4f}")
+    print(f"Training time: {train_time / 60:.1f} min")
 
 
 if __name__ == "__main__":

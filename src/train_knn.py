@@ -1,7 +1,7 @@
-"""Modèle 1 : LBP (4x4 blocs) + KNN.
+"""Model 1: LBP (4x4 blocks) + KNN.
 
-Sélection des hyperparamètres sur une validation tirée de train, puis réentraînement
-sur tout train et évaluation sur test.
+Hyperparameters are selected on a validation split taken from train, then the model
+is refit on the whole train set and evaluated on test.
 
     python -m src.train_knn
 """
@@ -21,7 +21,7 @@ from src.features import batch_features, lbp_features
 LBP_GRID = [(8, 1), (8, 2), (8, 3), (16, 2)]  # (P, R)
 K_GRID = [1, 3, 5, 9, 15, 25, 35, 50]
 WEIGHTS_GRID = ["uniform", "distance"]
-P_METRIC_GRID = [1, 2]  # 1 = Manhattan, 2 = Euclidienne
+P_METRIC_GRID = [1, 2]  # 1 = Manhattan, 2 = Euclidean
 
 
 def main():
@@ -35,7 +35,7 @@ def main():
         t0 = time.perf_counter()
         F_tr = batch_features(lbp_features, X_tr, P=P, R=R)
         F_val = batch_features(lbp_features, X_val, P=P, R=R)
-        print(f"\nLBP P={P} R={R} : {F_tr.shape[1]} features ({time.perf_counter() - t0:.1f}s)")
+        print(f"\nLBP P={P} R={R}: {F_tr.shape[1]} features ({time.perf_counter() - t0:.1f}s)")
         for k, weights, p in itertools.product(K_GRID, WEIGHTS_GRID, P_METRIC_GRID):
             knn = KNeighborsClassifier(n_neighbors=k, weights=weights, p=p, n_jobs=-1).fit(F_tr, y_tr)
             acc = accuracy_score(y_val, knn.predict(F_val))
@@ -45,7 +45,7 @@ def main():
             if best is None or acc > best["val_accuracy"]:
                 best = row
 
-    print(f"\nMeilleure config : {best}")
+    print(f"\nBest config: {best}")
     REPORTS_DIR.mkdir(exist_ok=True)
     (REPORTS_DIR / "lbp_knn_grid.json").write_text(json.dumps(results, indent=2))
 
@@ -58,7 +58,7 @@ def main():
 
     MODELS_DIR.mkdir(exist_ok=True)
     joblib.dump({"model": knn, "lbp_params": lbp_params}, MODELS_DIR / "lbp_knn.joblib", compress=3)
-    print(f"Modèle sauvegardé dans {MODELS_DIR / 'lbp_knn.joblib'}")
+    print(f"Model saved to {MODELS_DIR / 'lbp_knn.joblib'}")
 
 
 if __name__ == "__main__":

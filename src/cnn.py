@@ -1,5 +1,5 @@
-"""Modèle 3 : mini-Xception (Arriaga et al., 2017, « Real-time Convolutional Neural Networks
-for Emotion and Gender Classification »), réimplémenté en PyTorch."""
+"""Model 3: mini-Xception (Arriaga et al., 2017, "Real-time Convolutional Neural Networks
+for Emotion and Gender Classification"), reimplemented in PyTorch."""
 import math
 
 import torch
@@ -8,7 +8,7 @@ import torch.nn.functional as F
 
 
 class SeparableConv2d(nn.Sequential):
-    """Convolution séparable en profondeur : depthwise 3x3 puis pointwise 1x1."""
+    """Depthwise separable convolution: depthwise 3x3 then pointwise 1x1."""
 
     def __init__(self, c_in, c_out):
         super().__init__(
@@ -18,7 +18,7 @@ class SeparableConv2d(nn.Sequential):
 
 
 class XceptionBlock(nn.Module):
-    """Deux convolutions séparables + max-pooling, avec raccourci résiduel 1x1 de stride 2."""
+    """Two separable convolutions + max-pooling, with a strided 1x1 residual shortcut."""
 
     def __init__(self, c_in, c_out):
         super().__init__()
@@ -34,7 +34,7 @@ class XceptionBlock(nn.Module):
 
 
 class MiniXception(nn.Module):
-    """width=1 : architecture d'origine (~57k paramètres) ; width=2 double tous les canaux."""
+    """width=1: original architecture (~57k parameters); width=2 doubles every channel count."""
 
     def __init__(self, num_classes=7, width=1):
         super().__init__()
@@ -47,14 +47,14 @@ class MiniXception(nn.Module):
         self.head = nn.Conv2d(c[4], num_classes, 3, padding=1)
 
     def forward(self, x):
-        """x : (N, 1, 48, 48) dans [0, 1]. Renvoie les logits (N, num_classes)."""
+        """x: (N, 1, 48, 48) in [0, 1]. Returns logits (N, num_classes)."""
         x = self.head(self.blocks(self.stem(x)))
         return x.mean(dim=(2, 3))  # global average pooling
 
 
 @torch.no_grad()
 def predict_proba(model, x, tta=True):
-    """Probabilités softmax ; avec tta, moyenne avec l'image retournée horizontalement."""
+    """Softmax probabilities; with tta, averaged with the horizontally flipped image."""
     model.eval()
     p = torch.softmax(model(x), dim=1)
     if tta:
@@ -63,7 +63,7 @@ def predict_proba(model, x, tta=True):
 
 
 def load_model(path, device="cpu"):
-    """Charge un checkpoint {state_dict, width, tta} sauvegardé par train_cnn."""
+    """Load a {state_dict, width, tta} checkpoint saved by train_cnn."""
     ckpt = torch.load(path, map_location=device)
     model = MiniXception(width=ckpt["width"]).to(device)
     model.load_state_dict(ckpt["state_dict"])
@@ -71,14 +71,14 @@ def load_model(path, device="cpu"):
 
 
 def augment(x, max_rot=10, max_shift=0.1, max_zoom=0.1, max_bright=0.2):
-    """Augmentations aléatoires par batch, directement sur GPU : flip horizontal,
-    rotation, décalage, zoom (une seule transformation affine) et luminosité/contraste."""
+    """Random per-batch augmentations, computed on GPU: horizontal flip, rotation,
+    shift and zoom (a single affine transform), brightness/contrast."""
     n = x.shape[0]
     dev = x.device
     flip = torch.where(torch.rand(n, device=dev) < 0.5, -1.0, 1.0)
     angle = (torch.rand(n, device=dev) * 2 - 1) * math.radians(max_rot)
     scale = 1 + (torch.rand(n, device=dev) * 2 - 1) * max_zoom
-    shift = (torch.rand(n, 2, device=dev) * 2 - 1) * max_shift * 2  # coordonnées normalisées [-1, 1]
+    shift = (torch.rand(n, 2, device=dev) * 2 - 1) * max_shift * 2  # normalized coordinates [-1, 1]
 
     cos, sin = torch.cos(angle) / scale, torch.sin(angle) / scale
     theta = torch.stack([
@@ -95,7 +95,7 @@ def augment(x, max_rot=10, max_shift=0.1, max_zoom=0.1, max_bright=0.2):
 
 
 def random_erasing(x, p=0.5, area=(0.02, 0.2), ratio=(0.3, 3.3)):
-    """Efface (bruit uniforme) un rectangle aléatoire dans une fraction p des images du batch."""
+    """Erase (uniform noise) a random rectangle in a fraction p of the batch images."""
     n, _, h, w = x.shape
     dev = x.device
     s = torch.empty(n, device=dev).uniform_(*area) * h * w
@@ -113,7 +113,7 @@ def random_erasing(x, p=0.5, area=(0.02, 0.2), ratio=(0.3, 3.3)):
 
 
 def mix_batch(x, y, mixup_alpha=0.4, cutmix_alpha=1.0):
-    """Applique mixup ou cutmix (1 chance sur 2) : renvoie x mélangé, y, y permuté et lambda."""
+    """Apply mixup or cutmix (50/50): returns mixed x, y, permuted y and lambda."""
     perm = torch.randperm(x.shape[0], device=x.device)
     if torch.rand(1).item() < 0.5:
         lam = float(torch.distributions.Beta(mixup_alpha, mixup_alpha).sample())
@@ -126,5 +126,5 @@ def mix_batch(x, y, mixup_alpha=0.4, cutmix_alpha=1.0):
     x0, x1 = max(cx - cw // 2, 0), min(cx + cw // 2, w)
     x = x.clone()
     x[:, :, y0:y1, x0:x1] = x[perm, :, y0:y1, x0:x1]
-    lam = 1 - (y1 - y0) * (x1 - x0) / (h * w)  # proportion réelle conservée
+    lam = 1 - (y1 - y0) * (x1 - x0) / (h * w)  # actual kept proportion
     return x, y, y[perm], lam

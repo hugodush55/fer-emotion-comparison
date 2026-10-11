@@ -1,22 +1,22 @@
-# Environnement
+# Environment
 .venv/
 __pycache__/
 *.pyc
 .ipynb_checkpoints/
 
-# Dataset (ne jamais pousser FER-2013)
+# Dataset (never push FER-2013)
 data/*
 !data/README.md
 
-# Modèles : seuls les poids légers (< ~20 Mo) sont versionnés
+# Models: only lightweight weights (< ~20 MB) are versioned
 models/*.pkl
 models/checkpoints/
 
-# Divers
+# Misc
 .DS_Store
 *.log
 gradio_cached_examples/
 .gradio/
 
-# Exemples générés depuis FER-2013 par app.py
+# Examples exported from FER-2013 by app.py
 examples/

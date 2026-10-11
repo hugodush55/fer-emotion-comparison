@@ -1,11 +1,11 @@
-"""Extraction de features classiques (LBP, HOG) sur des visages 48x48 en niveaux de gris."""
+"""Hand-crafted features (LBP, HOG) for 48x48 grayscale faces."""
 import numpy as np
 from joblib import Parallel, delayed
 from skimage.feature import hog, local_binary_pattern
 
 
 def lbp_features(img, P=8, R=1, method="uniform", grid=4):
-    """LBP découpé en grid x grid blocs : un histogramme normalisé par bloc, concaténés."""
+    """LBP over a grid x grid split: one normalized histogram per block, concatenated."""
     codes = local_binary_pattern(img, P, R, method=method)
     n_bins = P + 2 if method == "uniform" else 2 ** P
     h, w = codes.shape
@@ -20,12 +20,12 @@ def lbp_features(img, P=8, R=1, method="uniform", grid=4):
 
 
 def hog_features(img, orientations=9, cell=8, block=2):
-    """HOG : cellules cell x cell, blocs block x block, normalisation L2-Hys."""
+    """HOG: cell x cell pixel cells, block x block cell blocks, L2-Hys normalization."""
     return hog(img, orientations=orientations, pixels_per_cell=(cell, cell),
                cells_per_block=(block, block), block_norm="L2-Hys", feature_vector=True).astype(np.float32)
 
 
 def batch_features(fn, X, n_jobs=-1, **params):
-    """Applique fn(img, **params) à toutes les images en parallèle."""
+    """Apply fn(img, **params) to every image in parallel."""
     feats = Parallel(n_jobs=n_jobs, batch_size=512)(delayed(fn)(img, **params) for img in X)
     return np.stack(feats)

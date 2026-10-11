@@ -1,5 +1,5 @@
 {
-  "model": "mini_xception",
+  "model": "mini_xception_v1",
   "test_accuracy": 0.6368069100027863,
   "best_epoch": 66,
   "best_val_loss": 0.9929986000061035,
