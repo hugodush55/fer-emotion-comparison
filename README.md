@@ -1,6 +1,8 @@
 # Facial emotion recognition: LBP+KNN vs HOG+SVM vs mini-Xception
 
-TD4, Machine Learning for Robotics (ENSTA). Three emotion classifiers trained on FER-2013
+Course project by **Hugo Lequy** (ENSTA, Machine Learning for Robotics, TD4).
+
+Three emotion classifiers trained on FER-2013
 (7 classes: Angry, Disgust, Fear, Happy, Sad, Surprise, Neutral) and compared in a Gradio interface
 that runs all three models **on the same face** and shows, for each one, the label, the confidence and the latency (ms).
 
@@ -8,7 +10,7 @@ that runs all three models **on the same face** and shows, for each one, the lab
 
 [![Demo video: click to play](media/demo_thumbnail.jpg)](media/demo.mp4)
 
-[media/demo.mp4](media/demo.mp4) (1 min 55, no sound, played back at 1.6× speed): the same FER-2013 face classified
+[media/demo.mp4](media/demo.mp4) (1 min 55, 720p, no sound, played back at 1.6× speed): the same FER-2013 face classified
 by the three models, then live webcam predictions on several expressions. The latencies shown in the video
 (up to about 30 ms for the CNN) are higher than in the table below because the laptop was running on battery
 while recording the screen; the ranking of the models is the same.
